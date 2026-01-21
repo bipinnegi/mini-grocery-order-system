@@ -1,0 +1,30 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using order_api.Models;
+using order_api.Services;
+
+namespace order_api.Controllers;
+
+[ApiController]
+[Route("orders")]
+public class OrdersController : ControllerBase
+{
+    private readonly IOrderService _orderService;
+
+    public OrdersController(IOrderService orderService)
+    {
+        _orderService = orderService;
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> PlaceOrder([FromBody] OrderRequest request)
+    {
+        var result = await _orderService.PlaceOrderAsync(
+            request.ProductId,
+            request.Quantity);
+
+        if (!result.Success)
+            return BadRequest(result.Message);
+
+        return Ok(result.Message);
+    }
+}
