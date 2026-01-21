@@ -1,0 +1,8 @@
+<h2>Mini Grocery Store</h2>
+
+<div *ngFor="let p of products">
+  {{ p.name }} - ₹{{ p.price }} (Stock: {{ p.stock }})
+  <button (click)="order(p.id)">Order 1</button>
+</div>
+
+<p>{{ message }}</p>
