@@ -1,0 +1,16 @@
+# Visual Studio
+.vs/
+**/.vs/
+
+# Build
+bin/
+obj/
+**/bin/
+**/obj/
+
+# Frontend
+node_modules/
+dist/
+
+# OS
+.DS_Store
