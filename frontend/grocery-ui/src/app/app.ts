@@ -1,32 +1,61 @@
-import { Component, OnInit } from '@angular/core';
-import { ProductService } from './services/product.service';
+import { Component, ChangeDetectorRef } from '@angular/core';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  templateUrl: './app.html',
-  styleUrl: './app.css'
+  imports: [CommonModule, HttpClientModule],
+  templateUrl: './app.html'
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
+  apiUrl = 'http://localhost:5042';
+
   products: any[] = [];
   message = '';
 
-  constructor(private service: ProductService) {}
+  constructor(
+    private http: HttpClient,
+    private cdr: ChangeDetectorRef
+  ) {}
 
-  ngOnInit() {
-    this.loadProducts();
-  }
-
+  // ✅ GET /products
   loadProducts() {
-    this.service.getProducts().subscribe(data => {
-      this.products = data;
-    });
+    this.http.get<any[]>(`${this.apiUrl}/products`)
+      .subscribe({
+        next: res => {
+          this.products = res;
+          this.cdr.detectChanges(); // ✅ correct
+        },
+        error: () => {
+          this.message = 'Failed to load products';
+          this.cdr.detectChanges(); // ✅ correct
+        }
+      });
   }
 
-  order(productId: number) {
-    this.service.placeOrder(productId, 1).subscribe({
-      next: () => this.message = 'Order placed successfully',
-      error: err => this.message = err.error
-    });
+  // orders
+  placeOrder(productId: number, quantity: number) {
+  if (!quantity || quantity <= 0) {
+    alert('Please enter a valid quantity');
+    return;
   }
+
+  this.http.post(`${this.apiUrl}/orders`, {
+    productId,
+    quantity: Number(quantity)
+  }).subscribe({
+    next: () => {
+      alert('✅ Order placed successfully');
+      this.loadProducts();
+      this.cdr.detectChanges();
+    },
+    error: err => {
+      alert(err.error?.message || '❌ Insufficient stock');
+      this.cdr.detectChanges();
+    }
+  });
+}
+
+
 }

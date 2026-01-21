@@ -1,8 +1,31 @@
 <h2>Mini Grocery Store</h2>
 
+<!-- Load Products -->
+<button (click)="loadProducts()">Load Products</button>
+
+<hr />
+
+<!-- Product List -->
 <div *ngFor="let p of products">
-  {{ p.name }} - ₹{{ p.price }} (Stock: {{ p.stock }})
-  <button (click)="order(p.id)">Order 1</button>
+  <p>
+    <strong>{{ p.name }}</strong> |
+    Price: {{ p.price }} |
+    Stock: {{ p.stock }}
+  </p>
+
+  <input
+    type="number"
+    min="1"
+    #qty
+    placeholder="Quantity"
+  />
+
+  <button (click)="placeOrder(p.id, +qty.value)">
+    Place Order
+  </button>
+
+  <hr />
 </div>
 
-<p>{{ message }}</p>
+<!-- Message -->
+<p style="color: red">{{ message }}</p>

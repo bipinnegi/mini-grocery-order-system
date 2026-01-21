@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
-  private apiUrl = 'https://localhost:7211'; // 🔴 your backend port
+  private apiUrl = 'http://localhost:5042'; // 🔴 your backend port
 
   constructor(private http: HttpClient) {}
 
