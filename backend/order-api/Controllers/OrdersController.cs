@@ -23,8 +23,9 @@ public class OrdersController : ControllerBase
             request.Quantity);
 
         if (!result.Success)
-            return BadRequest(result.Message);
+            return BadRequest(new { message = result.Message });
 
-        return Ok(result.Message);
+        return Ok(new { message = result.Message });
     }
+
 }
